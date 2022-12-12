@@ -2,7 +2,7 @@
   "name": "mlgbotv2",
   "version": "1.0.0",
   "description": "",
-  "main": "bot.js",
+  "main": "index.js",
   "scripts": {
     "test": "node ."
   },
