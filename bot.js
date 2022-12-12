@@ -33,3 +33,5 @@ for (const file of eventFiles) {
 }
 
 client.login(token);
+
+//THIS IS A NEW CHANGE FOR REPLIT
