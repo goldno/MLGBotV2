@@ -1,6 +1,6 @@
 require("dotenv").config();
 const path = require('node:path');
-const { token } = process.env.token;
+const token = process.env.token;
 const { Client, Events, Collection, GatewayIntentBits } = require("discord.js");
 const fs = require("fs");
 
@@ -33,5 +33,3 @@ for (const file of eventFiles) {
 }
 
 client.login(token);
-
-//THIS IS A NEW CHANGE FOR REPLIT
