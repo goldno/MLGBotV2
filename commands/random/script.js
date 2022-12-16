@@ -4,7 +4,7 @@ const axios = require('axios');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('script')
-        .setDescription('Rdisplays a random bible verse!'),
+        .setDescription('displays a random bible verse!'),
     async execute(interaction) {
         axios.get('https://labs.bible.org/api/?passage=random').then(resp => {
             const str1 = '<b>';
