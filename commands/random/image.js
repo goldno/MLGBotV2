@@ -1,6 +1,4 @@
-const { SlashCommandBuilder, SelectMenuOptionBuilder } = require('discord.js');
-const DEV1_ID = process.env.DEV1_ID;
-const DEV2_ID = process.env.DEV2_ID;
+const { SlashCommandBuilder, SelectMenuOptionBuilder, EmbedBuilder } = require('discord.js');
 
 // OpenAI Configuration
 const { Configuration, OpenAIApi } = require("openai");
@@ -18,7 +16,10 @@ module.exports = {
                 .setDescription('Prompt for the AI to generate an image')),
 	async execute(interaction) {
 		const prompt = interaction.options.getString('prompt');
-		//let image_url = '';
+		const embed = new EmbedBuilder()
+			.setTitle('Image Generator')
+			.setDescription(`Prompt: ${prompt}`)
+			.setFooter({ text: 'OpenAI_API' })
 		await interaction.deferReply();
 		try {
 			const image = await openai.createImage({
@@ -26,7 +27,8 @@ module.exports = {
 				n: 1,
 			});
 			let image_url = image.data.data[0].url;
-			await interaction.editReply(image_url);
+			embed.setImage(image_url)
+			await interaction.editReply({ embeds: [embed] });
 		} catch (error) {
 			if (error.response) {
 				console.log(error.response.status);

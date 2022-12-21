@@ -1,11 +1,11 @@
 require("dotenv").config();
 const path = require('node:path');
 const token = process.env.token;
-const { Client, Events, Collection, GatewayIntentBits } = require("discord.js");
+const { Client, Events, Collection, GatewayIntentBits  } = require("discord.js");
 const fs = require("fs");
 const cron = require('cron');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
 
 // Initialize commands
 client.commands = new Collection();
