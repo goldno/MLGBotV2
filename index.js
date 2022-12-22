@@ -5,7 +5,7 @@ const { Client, Events, Collection, GatewayIntentBits  } = require("discord.js")
 const fs = require("fs");
 const cron = require('cron');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
 // Initialize commands
 client.commands = new Collection();
