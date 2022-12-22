@@ -16,7 +16,7 @@ module.exports = {
 	async execute(interaction) {
 		const prompts = readCSV('./resources/randomprompts.csv');
 		const randomPrompt = pickRandom(prompts);
-		console.log(randomPrompt);
+		//console.log(randomPrompt);
 
 		const embed = new EmbedBuilder()
 			.setTitle('Image Generator Game')
@@ -41,7 +41,7 @@ module.exports = {
 						.then(collected => {
 							const answer = collected.first().content;
 							const similarity = stringSimilarity.compareTwoStrings(randomPrompt, answer);
-							console.log(`Similarity: ${similarity}`);
+							//console.log(`Similarity: ${similarity}`);
 							let result = '';
 							if(similarity < 0.25)  result = 'Not even close!';
 							else if(similarity >= 0.26 && similarity < 0.6) result = 'Not Bad!';
