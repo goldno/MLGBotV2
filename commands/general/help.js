@@ -15,6 +15,7 @@ const {
       const emojis = {
         random: "🤪",
         general: "⚙️",
+        admin: "👮‍♂️",
       };
   
       const directories = [
