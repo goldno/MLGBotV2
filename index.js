@@ -5,7 +5,7 @@ const { Client, Events, Collection, GatewayIntentBits, EmbedBuilder, AttachmentB
 const fs = require("fs");
 const cron = require('cron');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates] });
 
 // Initialize commands
 client.commands = new Collection();
