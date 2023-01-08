@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, AttachmentBuilder } = require('discord.js');
 const malScraper = require('mal-scraper')
 const search = malScraper.search
 
@@ -8,39 +8,113 @@ module.exports = {
 		.setDescription('search an anime using MyAnimeList!')
 		.addStringOption(option =>
 			option.setName('searchterm')
-				.setDescription('the anime to search')),
+				.setDescription('the anime to search')
+				.setRequired(true)),
 	async execute(interaction) {
 		const searchterm = interaction.options.getString('searchterm');
 
+		let mainEmbed = new EmbedBuilder();
+		let synopsisEmbed = new EmbedBuilder();
+
 		// Scrape data from MAL
-		const title=''; const synopsis=''; const picture=''; const mainChars=[]; const type=''; const episodeCount=''; 
-		const premiered=''; const studio=''; const malScore=''; const source=''; const url=''; const genres=''; 
 		malScraper.getInfoFromName(searchterm)
   			.then((data) => {
-				console.log(data)
-				title = data.title;
-				synopsis = data.synopsis;
-				picture = data.picture;
+				const title = data.title;
+				const synopsis = data.synopsis;
+				const picture = data.picture;
+				let mainChars=[];
+				let mainCharPics = []
 				data.characters.forEach(char => {
 					if(char.role = 'Main')
 					mainChars.push({ name: char.name, picture: char.picture })
+					mainCharPics.push(char.picture);
 				})
-				type = data.type;
-				episodeCount = data.episodes;
-				premiered = data.premiered;
-				studio = data.studios;
-				malScore = data.score;
-				source = data.source;
-				url = data.url;
-				genres = data.genres;
+				const type = data.type;
+				const episodeCount = data.episodes;
+				const premiered = data.premiered;
+				const studio = data.studios;
+				const malScore = data.score;
+				const source = data.source;
+				const url = data.url;
+				const genres = data.genres;
+				const status = data.status;
+
+				// Embeds
+				mainEmbed
+					.setTitle(`${title}`)
+					.setURL(`${url}`)
+					.setFooter({ text: 'MyAnimeList' })
+					.setImage(picture)
+					.setTimestamp()
+					.setThumbnail('https://i.imgur.com/kNgqOTd.png')
+					.setDescription(`**Information**
+									MAL Score: ${malScore}
+									Type: ${type}
+									Episodes: ${episodeCount}
+									Status: ${status}
+									Aired: ${premiered}
+									Studio(s): ${studio}
+									Source: ${source}
+									Genres: ${genres}`);
+
+				synopsisEmbed
+					.setTitle(`${title}`)
+					.setURL(`${url}`)
+					.setFooter({ text: 'MyAnimeList' })
+					.setImage(picture)
+					.setThumbnail('https://i.imgur.com/kNgqOTd.png')
+					.setDescription(synopsis);
+
+
+				const components = (state) => [
+					new ActionRowBuilder().addComponents(
+						new StringSelectMenuBuilder()
+						.setCustomId("select")
+						.setPlaceholder("Select")
+						.setDisabled(state)
+						.addOptions(
+							{
+								label: 'Information',
+								description: 'Information of the anime',
+								value: 'first_option',
+							},
+							{
+								label: 'Synopsis',
+								description: 'Synopsis of the anime',
+								value: 'second_option',
+							},
+						)
+					),
+					];
+	
+				const initialMessage = interaction.reply({
+					embeds: [mainEmbed],
+					components: components(false),
+				});
+	
+				const filter = (interaction) =>
+					interaction.user.id === interaction.member.id;
+				
+				const collector = interaction.channel.createMessageComponentCollector({
+					filter,
+				});
+	
+				collector.on("collect", (interaction) => {
+					if(interaction.values[0] == 'first_option') {
+						interaction.update({ embeds: [mainEmbed] });
+					} else if(interaction.values[0] == 'second_option') {
+						interaction.update({ embeds: [synopsisEmbed] });
+					}
+				});
+	
+				collector.on("end", () => {
+					initialMessage.edit({ components: components(true) });
+				});
+
+
 			})
   			.catch((err) => {
 				interaction.reply('Failed to search anime :(')
-				console.log(err)
 			})
-		
-		// Embeds
-
-		interaction.reply('Not Implemented Yet');
 	},
 };

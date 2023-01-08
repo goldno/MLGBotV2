@@ -46,7 +46,7 @@ module.exports = {
 							if(similarity < 0.25)  result = 'Not even close!';
 							else if(similarity >= 0.26 && similarity < 0.6) result = 'Not Bad!';
 							else result = 'Very Good!';
-							interaction.followUp(`${result}\n The original prompt was **${randomPrompt}**`);
+							interaction.followUp(`${result}\nThe original prompt was **${randomPrompt}**`);
 						})
 				})
 		} catch (error) {
