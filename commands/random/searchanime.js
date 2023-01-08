@@ -1,6 +1,26 @@
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, AttachmentBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
 const malScraper = require('mal-scraper')
 const search = malScraper.search
+
+module.exports = {
+    name: 'interactionCreate',
+    execute(interaction) {
+        if (!interaction.isSelectMenu() && interaction.isCommand()) return
+
+        if (interaction.customId !== 'select') return
+
+        switch (interaction.values[0]) {
+            case 'first_option':
+                interaction.update({embeds: [funHelp], ephemeral: true})
+                break
+            case 'second_option':
+                interaction.update({embeds: [adminHelp], ephemeral: true})
+                break
+            default:
+                return
+        }
+    },
+};
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -16,8 +36,29 @@ module.exports = {
 		let mainEmbed = new EmbedBuilder();
 		let synopsisEmbed = new EmbedBuilder();
 
+		const components = (state) => [
+			new ActionRowBuilder().addComponents(
+				new StringSelectMenuBuilder()
+				.setCustomId("select")
+				.setPlaceholder("Select")
+				.setDisabled(state)
+				.addOptions(
+					{
+						label: 'Information',
+						description: 'Information of the anime',
+						value: 'first_option',
+					},
+					{
+						label: 'Synopsis',
+						description: 'Synopsis of the anime',
+						value: 'second_option',
+					},
+				)
+			),
+		];
+
 		// Scrape data from MAL
-		malScraper.getInfoFromName(searchterm)
+		await malScraper.getInfoFromName(searchterm)
   			.then((data) => {
 				const title = data.title;
 				const synopsis = data.synopsis;
@@ -65,56 +106,33 @@ module.exports = {
 					.setThumbnail('https://i.imgur.com/kNgqOTd.png')
 					.setDescription(synopsis);
 
-
-				const components = (state) => [
-					new ActionRowBuilder().addComponents(
-						new StringSelectMenuBuilder()
-						.setCustomId("select")
-						.setPlaceholder("Select")
-						.setDisabled(state)
-						.addOptions(
-							{
-								label: 'Information',
-								description: 'Information of the anime',
-								value: 'first_option',
-							},
-							{
-								label: 'Synopsis',
-								description: 'Synopsis of the anime',
-								value: 'second_option',
-							},
-						)
-					),
-					];
-	
-				const initialMessage = interaction.reply({
-					embeds: [mainEmbed],
-					components: components(false),
-				});
-	
-				const filter = (interaction) =>
-					interaction.user.id === interaction.member.id;
-				
-				const collector = interaction.channel.createMessageComponentCollector({
-					filter,
-				});
-	
-				collector.on("collect", (interaction) => {
-					if(interaction.values[0] == 'first_option') {
-						interaction.update({ embeds: [mainEmbed] });
-					} else if(interaction.values[0] == 'second_option') {
-						interaction.update({ embeds: [synopsisEmbed] });
-					}
-				});
-	
-				collector.on("end", () => {
-					initialMessage.edit({ components: components(true) });
-				});
-
-
 			})
   			.catch((err) => {
 				interaction.reply('Failed to search anime :(')
 			})
+
+			
+			const initialMessage = await interaction.reply({
+				embeds: [mainEmbed],
+				components: components(false),
+			});
+
+			const filter = (interaction) => interaction.user.id === interaction.member.id;
+			
+			const collector = interaction.channel.createMessageComponentCollector({
+				filter,
+			});
+
+			collector.on("collect", (interaction) => {
+				if(interaction.values[0] == 'first_option') {
+					interaction.update({ embeds: [mainEmbed] });
+				} else if(interaction.values[0] == 'second_option') {
+					interaction.update({ embeds: [synopsisEmbed] });
+				}
+			});
+
+			collector.on("end", () => {
+				initialMessage.edit({ components: components(true) });
+			});
 	},
 };
