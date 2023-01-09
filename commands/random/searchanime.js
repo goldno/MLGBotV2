@@ -58,7 +58,8 @@ module.exports = {
 		];
 
 		// Scrape data from MAL
-		await malScraper.getInfoFromName(searchterm)
+		const updateEmbeds = () => {
+		malScraper.getInfoFromName(searchterm)
   			.then((data) => {
 				const title = data.title;
 				const synopsis = data.synopsis;
@@ -110,6 +111,8 @@ module.exports = {
   			.catch((err) => {
 				interaction.reply('Failed to search anime :(')
 			})
+		}
+		updateEmbeds();
 
 			
 			const initialMessage = await interaction.reply({
@@ -123,15 +126,17 @@ module.exports = {
 				filter,
 			});
 
-			collector.on("collect", (interaction) => {
+			collector.on("collect", async (interaction) => {
 				if(interaction.values[0] == 'first_option') {
-					interaction.update({ embeds: [mainEmbed] });
+					updateEmbeds();
+					await interaction.update({ embeds: [mainEmbed] });
 				} else if(interaction.values[0] == 'second_option') {
-					interaction.update({ embeds: [synopsisEmbed] });
+					updateEmbeds();
+					await interaction.update({ embeds: [synopsisEmbed] });
 				}
 			});
 
-			collector.on("end", () => {
+			collector.on("end", async () => {
 				initialMessage.edit({ components: components(true) });
 			});
 	},
