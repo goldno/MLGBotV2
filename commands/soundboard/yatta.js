@@ -21,7 +21,7 @@ module.exports = {
 				selfMute: false
 			}).subscribe(player);
 			const mp3File = 'yattaTrack.mp3';
-			let resource = createAudioResource(join('./resources/', mp3File));
+			let resource = createAudioResource(join('./resources/soundboard/', mp3File));
 			interaction.reply(`Playing ${mp3File} 🔊`)
 			player.play(resource);
 			player.on(AudioPlayerStatus.Idle, () => {
