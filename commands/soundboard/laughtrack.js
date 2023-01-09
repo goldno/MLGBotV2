@@ -32,7 +32,7 @@ module.exports = {
 			if(isInt(selection)) {
 				chosenLaugh = `laugh${selection}.mp3`;
 				let resource = createAudioResource(join('./resources/soundboard/laughtracks/', chosenLaugh));
-				interaction.reply(`Playing ${chosenLaugh} 🔊`)
+				interaction.reply({ content: `Playing ${chosenLaugh} 🔊`, ephemeral: true })
 				player.play(resource);
 				player.on(AudioPlayerStatus.Idle, () => {
 					player.stop();
@@ -43,7 +43,7 @@ module.exports = {
 					const laughFiles = files.filter(filename => filename.endsWith('.mp3'));
 					chosenLaugh = randomElement(laughFiles);
 					let resource = createAudioResource(join('./resources/soundboard/laughtracks/', chosenLaugh));
-					interaction.reply(`Playing ${chosenLaugh} 🔊`)
+					interaction.reply({ content: `Playing ${chosenLaugh} 🔊`, ephemeral: true })
 					player.play(resource);
 					player.on(AudioPlayerStatus.Idle, () => {
 						player.stop();
