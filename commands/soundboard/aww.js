@@ -4,8 +4,8 @@ const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerSta
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('yatta')
-		.setDescription('Soundboard: Yatta!'),
+		.setName('aww')
+		.setDescription('Soundboard: Aww'),
 	async execute(interaction) {
 		const voiceChannel = interaction.member.voice.channel;
 		if(!voiceChannel) {
@@ -20,7 +20,7 @@ module.exports = {
 				selfDeaf: false,
 				selfMute: false
 			}).subscribe(player);
-			const mp3File = 'yattaTrack.mp3';
+			const mp3File = 'aww.mp3';
 			let resource = createAudioResource(join('./resources/soundboard/', mp3File));
 			interaction.reply({ content: `Playing ${mp3File} 🔊`, ephemeral: true })
 			player.play(resource);

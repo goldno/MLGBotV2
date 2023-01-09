@@ -1,11 +1,11 @@
-const { SlashCommandBuilder  } = require('discord.js');
+const { SlashCommandBuilder, Client  } = require('discord.js');
 const { join } = require('path');
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus  } = require('@discordjs/voice');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('yatta')
-		.setDescription('Soundboard: Yatta!'),
+		.setName('crickets')
+		.setDescription('Soundboard: Crickets'),
 	async execute(interaction) {
 		const voiceChannel = interaction.member.voice.channel;
 		if(!voiceChannel) {
@@ -20,7 +20,7 @@ module.exports = {
 				selfDeaf: false,
 				selfMute: false
 			}).subscribe(player);
-			const mp3File = 'yattaTrack.mp3';
+			const mp3File = 'crickets.mp3';
 			let resource = createAudioResource(join('./resources/soundboard/', mp3File));
 			interaction.reply({ content: `Playing ${mp3File} 🔊`, ephemeral: true })
 			player.play(resource);
