@@ -3,26 +3,6 @@ const malScraper = require('mal-scraper')
 const search = malScraper.search
 
 module.exports = {
-    name: 'interactionCreate',
-    execute(interaction) {
-        if (!interaction.isSelectMenu() && interaction.isCommand()) return
-
-        if (interaction.customId !== 'select') return
-
-        switch (interaction.values[0]) {
-            case 'first_option':
-                interaction.update({embeds: [funHelp], ephemeral: true})
-                break
-            case 'second_option':
-                interaction.update({embeds: [adminHelp], ephemeral: true})
-                break
-            default:
-                return
-        }
-    },
-};
-
-module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('searchanime')
 		.setDescription('search an anime using MyAnimeList!')
@@ -32,36 +12,18 @@ module.exports = {
 				.setRequired(true)),
 	async execute(interaction) {
 		const searchterm = interaction.options.getString('searchterm');
+		await interaction.deferReply();
 
 		let mainEmbed = new EmbedBuilder();
 		let synopsisEmbed = new EmbedBuilder();
+		let title = '';
 
-		const components = (state) => [
-			new ActionRowBuilder().addComponents(
-				new StringSelectMenuBuilder()
-				.setCustomId("select")
-				.setPlaceholder("Select")
-				.setDisabled(state)
-				.addOptions(
-					{
-						label: 'Information',
-						description: 'Information of the anime',
-						value: 'first_option',
-					},
-					{
-						label: 'Synopsis',
-						description: 'Synopsis of the anime',
-						value: 'second_option',
-					},
-				)
-			),
-		];
+	
 
 		// Scrape data from MAL
-		const updateEmbeds = () => {
-		malScraper.getInfoFromName(searchterm)
+		await malScraper.getInfoFromName(searchterm)
   			.then((data) => {
-				const title = data.title;
+				title = data.title;
 				const synopsis = data.synopsis;
 				const picture = data.picture;
 				let mainChars=[];
@@ -109,13 +71,32 @@ module.exports = {
 
 			})
   			.catch((err) => {
-				interaction.reply('Failed to search anime :(')
+				interaction.editReply('Failed to search anime :(')
 			})
-		}
-		updateEmbeds();
 
+
+			const components = (state) => [
+				new ActionRowBuilder().addComponents(
+					new StringSelectMenuBuilder()
+					.setCustomId("select")
+					.setPlaceholder("Select")
+					.setDisabled(state)
+					.addOptions(
+						{
+							label: `${title} Information`,
+							description: 'Information of the anime',
+							value: `${title} Information`,
+						},
+						{
+							label: `${title} Synopsis`,
+							description: 'Synopsis of the anime',
+							value: `${title} Synopsis`,
+						},
+					)
+				),
+			];
 			
-			const initialMessage = await interaction.reply({
+			const initialMessage = await interaction.editReply({
 				embeds: [mainEmbed],
 				components: components(false),
 			});
@@ -127,11 +108,9 @@ module.exports = {
 			});
 
 			collector.on("collect", async (interaction) => {
-				if(interaction.values[0] == 'first_option') {
-					updateEmbeds();
+				if(interaction.values[0] == `${title} Information`) {
 					await interaction.update({ embeds: [mainEmbed] });
-				} else if(interaction.values[0] == 'second_option') {
-					updateEmbeds();
+				} else if(interaction.values[0] == `${title} Synopsis`) {
 					await interaction.update({ embeds: [synopsisEmbed] });
 				}
 			});
