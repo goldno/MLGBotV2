@@ -8,7 +8,7 @@ module.exports = {
         const leagueRole = '<@&1096596027739480125>'
         const channel = message.channel;
         const user = message.author.id;
-        if(message.content == leagueRole) {
+        if(message.content.includes(testRole)) {
             message.delete()
                 .then(msg => channel.send('Error. Cannot send this message.'))
                 .catch(console.error);
