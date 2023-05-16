@@ -8,9 +8,28 @@ module.exports = {
         const leagueRole = '<@&1096596027739480125>'
         const channel = message.channel;
         const user = message.author.id;
-        if(message.content.includes(testRole)) {
+        const errorMessages = ['Error. This operation completed successfully.',
+                            'Proceding with this command will delete you. Are you sure?',
+                            'Click \'OK\' to continue.',
+                            'Error. Cannot send this message.',
+                            'An error has occurred.',
+                            'Task failed successfully.',
+                            'You\'re screwed.',
+                            'Something bad happened.',
+                            'You\'ve been warned multiple times that this command does not exist. Now you\'ve made us catch this worthless exception and we\'re upset. Do not do this again.',
+                            'User error. Replace user.',
+                            'Are you sure you want to install this malware?',
+                            'Connection failed.',
+                            'Get better.',
+                            'You\'re trolling.',
+                            'Don\'t look behind you...',
+                            'Your computer will now shut down.',
+                            'This command has stopped working. Please don\'t try again later.',
+                            'OwO What\'s THIS? You appear to have encountered an error, it will be alright though (nuzzles you), awooooo'];
+        if(message.content.includes(leagueRole)) {
+            var randomElement = errorMessages[Math.floor(Math.random() * errorMessages.size)]
             message.delete()
-                .then(msg => channel.send('Error. Cannot send this message.'))
+                .then(msg => channel.send(randomElement))
                 .catch(console.error);
         }
 
