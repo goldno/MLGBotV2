@@ -7,7 +7,7 @@ module.exports = {
         const testRole = '<@&896503336512135269>'
         const leagueRole = '<@&1096596027739480125>'
         const channel = message.channel;
-        const user = message.author.id;
+        const userID = message.author.id;
         const errorMessages = ['Error. This operation completed successfully.',
                             'Proceding with this command will delete you. Are you sure?',
                             'Click \'OK\' to continue.',
@@ -29,7 +29,7 @@ module.exports = {
                             'No.'];
         if(message.content.includes(leagueRole)) {
             message.delete()
-                .then(msg => channel.send(errorMessages[Math.floor(Math.random() * errorMessages.length)]))
+                .then(msg => channel.send(`<@${userID}> ${errorMessages[Math.floor(Math.random() * errorMessages.length)]}`))
                 .catch(console.error);
         }
 
