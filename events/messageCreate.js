@@ -25,11 +25,11 @@ module.exports = {
                             'Don\'t look behind you...',
                             'Your computer will now shut down.',
                             'This command has stopped working. Please don\'t try again later.',
-                            'OwO What\'s THIS? You appear to have encountered an error, it will be alright though (nuzzles you), awooooo'];
-        if(message.content.includes(leagueRole)) {
-            var randomElement = errorMessages[Math.floor(Math.random() * errorMessages.size)]
+                            'OwO What\'s THIS? You appear to have encountered an error, it will be alright though (nuzzles you), awooooo',
+                            'No.'];
+        if(message.content.includes(testRole)) {
             message.delete()
-                .then(msg => channel.send(randomElement))
+                .then(msg => channel.send(errorMessages[Math.floor(Math.random() * errorMessages.length)]))
                 .catch(console.error);
         }
 
