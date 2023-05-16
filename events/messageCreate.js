@@ -27,7 +27,7 @@ module.exports = {
                             'This command has stopped working. Please don\'t try again later.',
                             'OwO What\'s THIS? You appear to have encountered an error, it will be alright though (nuzzles you), awooooo',
                             'No.'];
-        if(message.content.includes(testRole)) {
+        if(message.content.includes(leagueRole)) {
             message.delete()
                 .then(msg => channel.send(errorMessages[Math.floor(Math.random() * errorMessages.length)]))
                 .catch(console.error);
