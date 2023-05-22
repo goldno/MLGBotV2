@@ -35,11 +35,16 @@ module.exports = {
         }
 
 		/* If 2 ICANT emoji are posted, post WECANT emoji */
-        const icantEmoji = '<:icant:1081267987299975208>';
+        const icant1 = '<:ICANT:927771695450828840>';
+        const icant2 = '<:ICANT:1081267987299975208>';
         const wecantEmoji = '<:wecant:939359818043514960>';
-        await message.channel.messages.fetch({ limit: 2 }).then(messages => {
+        message.channel.messages.fetch({ limit: 2 }).then(messages => {
             const msgs = Array.from(messages.values());
-            if(msgs[0].content == icantEmoji && msgs[1].content == icantEmoji) message.channel.send(`${wecantEmoji}`);
+            console.log(msgs[0].content);
+            if((msgs[0].content == icant1  || msgs[0].content == icant2) && (msgs[1].content == icant1 || msgs[0].content == icant2))  
+            { 
+                message.channel.send(`${wecantEmoji}`); 
+            }
         });
 	},
 };
