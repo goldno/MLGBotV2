@@ -1,4 +1,5 @@
 const { Events } = require('discord.js');
+var stringSimilarity = require("string-similarity");
 
 module.exports = {
 	name: Events.MessageCreate,
@@ -32,6 +33,14 @@ module.exports = {
             message.delete()
                 .then(msg => channel.send(`<@${userID}> ${errorMessages[Math.floor(Math.random() * errorMessages.length)]}`))
                 .catch(console.error);
+        } else {
+            const similarity1 = stringSimilarity.compareTwoStrings(message.content, 'league');
+            const similarity2 = stringSimilarity.compareTwoStrings(message.content, 'lol');
+            if(similarity1 >= 0.7 || similarity2 >= 0.7) {
+                message.delete()
+                    .then(msg => channel.send(`<@${userID}> You have sent an  illegal word.`))
+                    .catch(console.error);
+            }
         }
 
 		/* If 2 ICANT emoji are posted, post WECANT emoji */
@@ -40,7 +49,6 @@ module.exports = {
         const wecantEmoji = '<:wecant:939359818043514960>';
         message.channel.messages.fetch({ limit: 2 }).then(messages => {
             const msgs = Array.from(messages.values());
-            console.log(msgs[0].content);
             if((msgs[0].content == icant1  || msgs[0].content == icant2) && (msgs[1].content == icant1 || msgs[0].content == icant2))  
             { 
                 message.channel.send(`${wecantEmoji}`); 
