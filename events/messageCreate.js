@@ -29,14 +29,20 @@ module.exports = {
                             'OwO What\'s THIS? You appear to have encountered an error, it will be alright though (nuzzles you), awooooo',
                             'No.',
                             'Sorry, No.'];
+        const okUser = '689195119035154441'
         if(message.content.includes(leagueRole)) {
             message.delete()
                 .then(msg => channel.send(`<@${userID}> ${errorMessages[Math.floor(Math.random() * errorMessages.length)]}`))
                 .catch(console.error);
         } else {
-            const similarity1 = stringSimilarity.compareTwoStrings(message.content, 'league');
-            const similarity2 = stringSimilarity.compareTwoStrings(message.content, 'lol');
-            if(similarity1 >= 0.7 || similarity2 >= 0.7) {
+            console.log(message.content.toLowerCase())
+            var similarity1 = stringSimilarity.compareTwoStrings(message.content.toLowerCase(), 'league');
+            var similarity2 = stringSimilarity.compareTwoStrings(message.content.toLowerCase(), 'lol');
+            var similarity3 = stringSimilarity.compareTwoStrings(message.content.toLowerCase(), 'league of legends');
+            var similarity4 = stringSimilarity.compareTwoStrings(message.content.toLowerCase(), 'l3ague');
+            var similarity5 = stringSimilarity.compareTwoStrings(message.content.toLowerCase(), 'l0l');
+            console.log(similarity2)
+            if(similarity1 >= 0.7 || similarity2 >= 0.7 || similarity3 >= 0.7 || similarity4 >= 0.7 || similarity5 >= 0.7) {
                 message.delete()
                     .then(msg => channel.send(`<@${userID}> You have sent an  illegal word.`))
                     .catch(console.error);
