@@ -21,15 +21,17 @@ module.exports = {
 			option
         .setName('amount')
 				.setDescription('Amount of people in dialogue, with a maximum of 10')
-)
+    )
     .addStringOption(option => 
       option
           .setName('location')
-          .setDescription('the location where the dialogue takes place'))
+          .setDescription('the location where the dialogue takes place')
+          )
     .addStringOption(option => 
       option
           .setName('prompt')
-          .setDescription('what the dialogue is about')),
+          .setDescription('what the dialogue is about')
+          ),
 	async execute(interaction) {
         await interaction.deferReply();
         const gamers = readCSV("gamers.csv");
