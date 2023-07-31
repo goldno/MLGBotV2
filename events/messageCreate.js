@@ -5,7 +5,7 @@ module.exports = {
 	name: Events.MessageCreate,
 	async execute(message) {
         /* League message */
-        const testRole = '<@&896503336512135269>'
+        /*const testRole = '<@&896503336512135269>'
         const leagueRole = '<@&1096596027739480125>'
         const channel = message.channel;
         const userID = message.author.id;
@@ -48,6 +48,7 @@ module.exports = {
                     .catch(console.error);
             }
         }
+        */
 
 		/* If 2 ICANT emoji are posted, post WECANT emoji */
         const icant1 = '<:ICANT:927771695450828840>';

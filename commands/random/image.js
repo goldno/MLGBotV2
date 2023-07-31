@@ -1,11 +1,31 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 // OpenAI Configuration
+/*
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
 	apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
+*/
+
+const { Prodia } = require("prodia.js");
+const prodia = new Prodia(process.env.PRODIA_KEY);
+
+async function imageGenerator(prompt) {
+    const job = await prodia.createJob({
+        model: "revAnimated_v122.safetensors [3f4fefd9]",
+        prompt: prompt,
+        negative_prompt: "text, blur, duplicate, distorted",
+    });
+
+    while (job.status !== "succeeded") {
+        await new Promise((resolve) => setTimeout(resolve, 250));
+        job = await prodia.getJob(job.job);
+    }
+
+    return job;
+}
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -19,8 +39,21 @@ module.exports = {
 		const embed = new EmbedBuilder()
 			.setTitle('Image Generator')
 			.setDescription(`Prompt: ${prompt}`)
-			.setFooter({ text: 'OpenAI_API' })
+			.setFooter({ text: 'Prodia API' })
 		await interaction.deferReply();
+
+		try {
+			const job = await imageGenerator(prompt);
+			//console.log(job);
+			let image_url = job.imageUrl;
+			embed.setImage(image_url)
+			await interaction.editReply({ embeds: [embed] });
+		} catch (error) {
+			console.error("Error:", error);
+			interaction.editReply('Error :/')
+		}
+
+		/*
 		try {
 			const image = await openai.createImage({
 				prompt: prompt,
@@ -40,5 +73,6 @@ module.exports = {
 				console.log(error.message);
 			}
 		}
+		*/
 	},
 };
