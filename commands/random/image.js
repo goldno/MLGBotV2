@@ -39,7 +39,7 @@ module.exports = {
 		const embed = new EmbedBuilder()
 			.setTitle('Image Generator')
 			.setDescription(`Prompt: ${prompt}`)
-			.setFooter({ text: 'Prodia API' })
+			.setFooter({ text: 'Prodia API | Image Model: sdv1_4.ckpt' })
 		await interaction.deferReply();
 
 		try {
@@ -50,7 +50,7 @@ module.exports = {
 			await interaction.editReply({ embeds: [embed] });
 		} catch (error) {
 			console.error("Error:", error);
-			interaction.editReply('Error :/')
+			interaction.editReply(`Error with prompt: ${prompt}`)
 		}
 
 		/*
