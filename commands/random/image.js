@@ -14,9 +14,9 @@ const prodia = new Prodia(process.env.PRODIA_KEY);
 
 async function imageGenerator(prompt) {
     const job = await prodia.createJob({
-        model: "revAnimated_v122.safetensors [3f4fefd9]",
+        model: "sdv1_4.ckpt [7460a6fa]",
         prompt: prompt,
-        negative_prompt: "text, blur, duplicate, distorted",
+        negative_prompt: "text, blur, duplicate, distorted, naked, nude",
     });
 
     while (job.status !== "succeeded") {
