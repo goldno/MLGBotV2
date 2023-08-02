@@ -2,12 +2,30 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const fs = require('fs');
 var stringSimilarity = require("string-similarity");
 
+const { Prodia } = require("prodia.js");
+const prodia = new Prodia(process.env.PRODIA_KEY);
+
+async function imageGenerator(prompt) {
+    const job = await prodia.createJob({
+        model: "sdv1_4.ckpt [7460a6fa]",
+        prompt: prompt,
+        negative_prompt: "text, blur, duplicate, distorted, naked, nude, racist",
+    });
+
+    while (job.status !== "succeeded") {
+        await new Promise((resolve) => setTimeout(resolve, 250));
+        job = await prodia.getJob(job.job);
+    }
+
+    return job;
+}
+
 // OpenAI Configuration
-const { Configuration, OpenAIApi } = require("openai");
+/* const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
 	apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
+const openai = new OpenAIApi(configuration); */
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -20,16 +38,18 @@ module.exports = {
 
 		const embed = new EmbedBuilder()
 			.setTitle('Image Generator Game')
-			.setFooter({ text: 'OpenAI_API' })
+			.setFooter({ text: 'Prodia' })
 		await interaction.deferReply();
 
 		// Generate image from random prompt and play game
 		try {
-			const image = await openai.createImage({
+			/* const image = await openai.createImage({
 				prompt: randomPrompt,
 				n: 1,
 			});
-			let image_url = image.data.data[0].url;
+			let image_url = image.data.data[0].url; */
+			const job = await imageGenerator(randomPrompt);
+			let image_url = job.imageUrl;
 			embed.setImage(image_url)
 			await interaction.editReply({ embeds: [embed] });
 
