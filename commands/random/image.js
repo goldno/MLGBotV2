@@ -16,7 +16,7 @@ async function imageGenerator(prompt) {
     const job = await prodia.createJob({
         model: "sdv1_4.ckpt [7460a6fa]",
         prompt: prompt,
-        negative_prompt: "text, blur, duplicate, distorted, naked, nude",
+        negative_prompt: "text, blur, duplicate, distorted, naked, nude, racist",
     });
 
     while (job.status !== "succeeded") {
