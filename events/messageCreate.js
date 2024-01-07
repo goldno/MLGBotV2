@@ -61,5 +61,18 @@ module.exports = {
                 message.channel.send(`${wecantEmoji}`); 
             }
         });
+
+        /* Replace twitter and x links with fixed links: https://github.com/dylanpdx/BetterTwitFix */
+        let authorName = message.author.username;
+        if(message.content.includes('https://x.com/')) {
+            message.delete();
+            let linkEnd = message.content.substring(13);
+            message.channel.send(authorName+': https://fixvx.com/'+linkEnd);
+        } else if(message.content.includes('https://twitter.com/')) {
+            message.delete();
+            let linkEnd = message.content.substring(19);
+            message.channel.send(authorName+': https://vxtwitter.com/'+linkEnd);
+        }
+
 	},
 };
