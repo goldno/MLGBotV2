@@ -63,15 +63,18 @@ module.exports = {
         });
 
         /* Replace twitter and x links with fixed links: https://github.com/dylanpdx/BetterTwitFix */
+        let botId = '1051629080895832155'
         let authorName = message.author.username;
-        if(message.content.includes('https://x.com/')) {
-            message.delete();
-            let linkEnd = message.content.substring(13);
+        let searchTerm1 = 'https://x.com/';
+        let searchTerm2 = 'https://twitter.com/';
+        if(message.content.includes(searchTerm1) && message.author.id != botId) {
+            let linkEnd = message.content.substring(message.content.indexOf(searchTerm1));
             message.channel.send(authorName+': https://fixvx.com/'+linkEnd);
-        } else if(message.content.includes('https://twitter.com/')) {
             message.delete();
-            let linkEnd = message.content.substring(19);
+        } else if(message.content.includes(searchTerm2) && message.author.id != botId) {
+            let linkEnd = message.content.substring(message.content.indexOf(searchTerm2));
             message.channel.send(authorName+': https://vxtwitter.com/'+linkEnd);
+            message.delete();
         }
 
 	},
