@@ -83,10 +83,19 @@ const birthdayMessage = new cron.CronJob('00 00 10 * * *', () => {
         const jpgFiles = files.filter(filename => filename.endsWith('.jpg'));
         const randomImg = randomElement(jpgFiles);
         const attachment = new AttachmentBuilder(folderPath+randomImg);
+
         const embed = new EmbedBuilder()
+        if(member.name == "Arun") {
+          embed
+          .setTitle('Happy Birthday Arun!')
+          .setDescription(`Happy Birthday to Arun!!!!`)
+          .setImage(`attachment://${randomImg}`);
+        } else {
+          embed
           .setTitle('Happy Birthday!')
           .setDescription(`Happy Birthday to <@${member.id}>!!!!`)
           .setImage(`attachment://${randomImg}`);
+        }
         channelGeneral.send({ content: `<@&${gamerRole}>`, embeds: [embed], files: [attachment] });
       });
     }
