@@ -36,15 +36,15 @@ for (const file of eventFiles) {
 }
 
 /* CronJob scheduled Discord message testing */
-const scheduledMessage = new cron.CronJob('00 09 18 * * *', () => {
-    const channelGeneral = client.channels.cache.get('931019066867609690');
-    const server = client.guilds.cache.get('734586607285567528');
-    const randomUser = server.members.cache.random();
-    const userID = randomUser.id;
-    const flushedEmoji = '<:flushedBIG:793533537407467581>';
-    channelGeneral.send(`<@${userID}> Hey you sussy baka ${flushedEmoji}, You're looking quite submissive and breedable tonight.`);
-}, null, true, 'America/New_York');
-scheduledMessage.start();
+// const scheduledMessage = new cron.CronJob('00 09 18 * * *', () => {
+//     const channelGeneral = client.channels.cache.get('931019066867609690');
+//     const server = client.guilds.cache.get('734586607285567528');
+//     const randomUser = server.members.cache.random();
+//     const userID = randomUser.id;
+//     const flushedEmoji = '<:flushedBIG:793533537407467581>';
+//     channelGeneral.send(`<@${userID}> Hey you sussy baka ${flushedEmoji}, You're looking quite submissive and breedable tonight.`);
+// }, null, true, 'America/New_York');
+// scheduledMessage.start();
 
 function randomElement(arg) {
   return arg[Math.floor(Math.random() * arg.length)];
