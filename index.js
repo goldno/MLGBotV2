@@ -65,7 +65,7 @@ for (let i = 1; i < lines.length; i++) {
   }
   birthdays.push(obj);
 }
-const birthdayMessage = new cron.CronJob('00 00 10 * * *', () => {
+const birthdayMessage = new cron.CronJob('00 00 12 * * *', () => {
   const channelGeneral = client.channels.cache.get('931019066867609690');
   let currentDate = new Date();
   let dd = String(currentDate.getDate()).padStart(2, '0');
